@@ -1,4 +1,5 @@
 
+
 // let cont = document.querySelector(".lines-container");
 // let menu = document.querySelector(".menu");
 // let pointer = document.querySelector(".pointer");
@@ -227,3 +228,127 @@ function toggleElement() {
         }, 500); // Adjust the delay to match the transition duration
     }
 }
+
+window.addEventListener('scroll', function() {
+    var targetSection = document.getElementById('targetSection');
+    var scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+
+    var desiredScrollHeight = 580;
+
+    if (scrollPosition >= desiredScrollHeight) {
+        setTimeout(function() {
+            targetSection.style.opacity = '1';
+            
+
+        }, 700); 
+    }
+});
+
+//////////////////////////////
+// //get slider item array 
+var pointimage = Array.from(document.querySelectorAll('.point-container .mnb'))
+
+// get number od slides
+var pointcounter = pointimage.length;
+
+// set current
+var curentpoint = 1;
+
+// //slide n e s
+// var pointnumber = document.getElementById('point-number');
+
+var prevbotton = document.getElementById('prevbotton');
+var nextbotton = document.getElementById('nextbotton');
+
+nextbotton.onclick = nextslidebutton;
+prevbotton.onclick = prevslidebutton;
+
+
+// //creat main ul li 
+
+var indicatorspointelement = document.createElement('ul');
+indicatorspointelement.setAttribute('id','point-ul');
+
+for (let index = 1; index <= pointcounter ; index++) {
+    var indicatorspointitem = document.createElement('li');
+
+    indicatorspointitem.setAttribute('data-index', index );
+
+    // indicatorspointitem.appendChild(document.createTextNode(index));
+
+    indicatorspointelement.appendChild(indicatorspointitem);
+}
+document.getElementById('indicatorsbotton').appendChild(indicatorspointelement);
+
+// creat the new ul 
+var  indicatorulpoint = document.getElementById('point-ul');
+
+
+//get   indicators slider item ul  
+var  indicatorspoltespoint = Array.from(document.querySelectorAll('#point-ul li'));
+
+for (let index = 0; index < indicatorspoltespoint.length ; index++) {
+    
+    indicatorspoltespoint[index].onclick = function () {
+        curentpoint = parseInt(this.getAttribute('data-index'));
+        checkbutton();
+    }
+}
+
+checkbutton();
+
+function nextslidebutton(){
+if(nextbotton.classList.contains('diabled')){
+    return false;
+}else{
+    curentpoint++;
+    checkbutton();
+}
+}
+function prevslidebutton(){
+    if(prevbotton.classList.contains('diabled')){
+        return false;
+    
+    }else{
+        curentpoint--;
+        checkbutton();
+    }
+    
+}
+function checkbutton() {
+
+    // slidenumber.textContent = 'Slide #' + (curentslide) + ' OF ' + (sildercounter) ;
+
+    removeallacticepoint();
+
+    //SET ACTIVE CLASS of image 
+    pointimage[curentpoint - 1].classList.add('active')
+
+     //SET ACTIVE CLASS of number 
+     indicatorulpoint.children[curentpoint - 1].classList.add('active');
+
+// check currentslide 
+if(curentpoint === 1){
+    prevbotton.classList.add('diabled');
+}else{
+    prevbotton.classList.remove('diabled');
+}
+
+if(curentpoint === pointcounter){
+    nextbotton.classList.add('diabled');
+}else{
+    nextbotton.classList.remove('diabled');
+}
+}
+
+//remove all actice
+function removeallacticepoint(){
+    pointimage.forEach(function (img) {
+        img.classList.remove('active');
+    })
+    indicatorspoltespoint.forEach(function (polt) {
+        polt.classList.remove('active');
+    })
+}
+
+setInterval(checkbutton, 1000);
